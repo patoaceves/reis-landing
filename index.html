@@ -531,12 +531,10 @@ src="https://www.facebook.com/tr?id=930475916097890&ev=PageView&noscript=1"
 
     fbq('track', 'CompleteRegistration');
 
-    fetch('https://services.leadconnectorhq.com/contacts/', {
+    fetch('https://services.leadconnectorhq.com/hooks/qsHWHzalt6jKbEflPpjS/webhook-trigger/47cfc924-2a5d-4802-aef6-cba82a6f497f', {
       method: 'POST',
       headers: {
-        'Content-Type':  'application/json',
-        'Authorization': 'Bearer pit-abc11d6b-19b5-4c91-aa17-e60f29b4b2c2',
-        'Version':       '2021-07-28',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(ghlPayload),
     }).finally(() => {
