@@ -510,17 +510,14 @@ src="https://www.facebook.com/tr?id=930475916097890&ev=PageView&noscript=1"
     const parts          = nombre.split(' ');
 
     const ghlPayload = {
-      locationId: 'qsHWHzalt6jKbEflPpjS',
-      firstName: parts[0] || '', lastName: parts.slice(1).join(' ') || '',
-      email, phone: phoneCompleto,
-      source: 'REIS Meta Form',
-      tags: [servicio.value, ubicacionFinal, 'meta', 'landing page'].filter(Boolean),
-      customFields: [
-        { key: 'tipo_de_servicio', value: servicio.value   },
-        { key: 'ubicacin',         value: ubicacionFinal   },
-        { key: 'empresa',          value: empresa           },
-        { key: 'empleados',        value: empleados.value  },
-      ],
+      nombre:           nombre,
+      email:            email,
+      phone:            phoneCompleto,
+      source:           'landing page',
+      tipo_de_servicio: servicio.value,
+      ubicacion:        ubicacionFinal,
+      empresa:          empresa,
+      empleados:        empleados.value,
     };
 
     const redirectParams = new URLSearchParams({
