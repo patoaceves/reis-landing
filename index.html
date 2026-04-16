@@ -4,344 +4,383 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>REIS Logística | Cotiza ahora</title>
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '930475916097890');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=930475916097890&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --dark: #0b1a22;
-    --card: #112638;
-    --primary: #145474;
+    --dark:          #0b1a22;
+    --card:          #112638;
+    --primary:       #145474;
     --primary-light: rgba(20,84,116,0.18);
-    --green: #37ae40;
-    --text: #e6edf3;
-    --muted: #8ba8b8;
-    --border: #1e3d52;
-    --input-bg: #0b1a22;
+    --green:         #37ae40;
+    --text:          #e6edf3;
+    --muted:         #7a9eb3;
+    --border:        #1e3d52;
+    --input-bg:      #0b1a22;
   }
 
   body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Titillium Web', system-ui, sans-serif;
     background: var(--dark);
     color: var(--text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px 16px 8px;
+    justify-content: flex-start;
+    padding: 44px 16px 64px;
     background-image:
-      radial-gradient(ellipse at 80% 10%, rgba(20,84,116,0.18) 0%, transparent 55%),
-      radial-gradient(ellipse at 10% 90%, rgba(55,174,64,0.08) 0%, transparent 50%);
+      radial-gradient(ellipse at 75% 5%,  rgba(20,84,116,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse at 15% 95%, rgba(55,174,64,0.09) 0%, transparent 50%);
   }
 
-  .container { width: 100%; max-width: 520px; }
+  .container { width: 100%; max-width: 540px; }
 
-  .logo-wrap { text-align: center; margin-bottom: 28px; animation: fadeInPage 0.5s ease both; }
-  .logo-wrap img { height: 80px; filter: brightness(0) invert(1); }
+  .logo-wrap { text-align: center; margin-bottom: 36px; }
+  .logo-wrap img { height: 72px; filter: brightness(0) invert(1); }
 
   .card {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 40px 36px 28px;
-    box-shadow: 0 12px 48px rgba(0,0,0,0.5);
-    animation: fadeInPage 0.5s ease 0.15s both;
+    border-radius: 22px;
+    padding: 44px 40px 42px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
   }
 
-  .card-header { margin-bottom: 28px; }
-
-  .divider {
-    width: 40px; height: 3px;
+  /* Progress */
+  .progress-wrap { margin-bottom: 40px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .progress-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .progress-count { font-size: 11px; font-weight: 600; color: var(--muted); }
+  .progress-count span { color: var(--text); }
+  .progress-track { height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .progress-fill {
+    height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--green));
-    border-radius: 2px;
-    margin-bottom: 16px;
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
   }
+  .progress-dots { display: flex; justify-content: space-between; margin-top: 10px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: background 0.4s, transform 0.4s, box-shadow 0.4s; }
+  .dot.done   { background: var(--green); }
+  .dot.active { background: var(--primary); transform: scale(1.45); box-shadow: 0 0 0 3px rgba(20,84,116,0.3); }
 
-  .card-header h1 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-  .card-header p  { font-size: 14px; color: var(--muted); line-height: 1.55; }
-
-  .field { margin-bottom: 18px; }
-
-  .field-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
+  /* Step header */
+  .step-header { margin-bottom: 28px; }
+  .step-eyebrow {
+    font-size: 11px; font-weight: 700; color: var(--green);
+    text-transform: uppercase; letter-spacing: 0.13em;
     margin-bottom: 10px;
+    display: flex; align-items: center; gap: 7px;
   }
-  .field-label .req { color: var(--green); margin-left: 2px; }
+  .step-eyebrow::before {
+    content: ''; display: inline-block;
+    width: 18px; height: 2px;
+    background: var(--green); border-radius: 2px; flex-shrink: 0;
+  }
+  .step-header h2 { font-size: 23px; font-weight: 700; color: var(--text); line-height: 1.3; }
 
   /* Radio list */
-  .radio-list { display: flex; flex-direction: column; gap: 8px; }
+  .radio-list { display: flex; flex-direction: column; gap: 10px; }
   .radio-list input[type="radio"] { display: none; }
-
   .radio-list label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 13px 16px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-    text-transform: none;
-    letter-spacing: 0;
-    margin: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--input-bg); border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 15px 18px; cursor: pointer;
+    font-family: 'Titillium Web', system-ui, sans-serif;
+    font-size: 15px; font-weight: 600; color: var(--text);
+    transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+    margin: 0; text-transform: none; letter-spacing: 0; user-select: none;
   }
-  .radio-list label:hover { border-color: var(--primary); }
+  .radio-list label:hover { border-color: rgba(20,84,116,0.65); }
   .radio-list input[type="radio"]:checked + label {
-    border-color: var(--primary);
-    background: var(--primary-light);
-    box-shadow: 0 0 0 2px rgba(20,84,116,0.25);
-    color: #fff;
+    border-color: var(--primary); background: var(--primary-light);
+    box-shadow: 0 0 0 2px rgba(20,84,116,0.2); color: #fff;
   }
-
   .radio-circle {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    flex-shrink: 0;
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--border); flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.2s, background 0.2s;
+    transition: all 0.18s;
   }
-  .radio-list input[type="radio"]:checked + label .radio-circle {
-    border-color: var(--primary);
-    background: var(--primary);
-  }
+  .radio-list input[type="radio"]:checked + label .radio-circle { border-color: var(--primary); background: var(--primary); }
   .radio-list input[type="radio"]:checked + label .radio-circle::after {
-    content: '';
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #fff;
+    content: ''; width: 7px; height: 7px; border-radius: 50%; background: #fff;
   }
 
-  /* Text inputs */
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"] {
-    width: 100%;
+  /* ── Service toggle with SVG icons ── */
+  .service-toggle { display: flex; gap: 14px; }
+  .service-toggle input[type="radio"] { display: none; }
+  .service-toggle label {
+    flex: 1;
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 26px 12px 22px;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Titillium Web', system-ui, sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--muted);
+    text-transform: none; letter-spacing: 0;
+    transition: all 0.22s;
     background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 15px;
-    padding: 11px 14px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; margin: 0; user-select: none;
+  }
+  .service-toggle label .svc-icon {
+    width: 48px; height: 48px;
+    object-fit: contain;
+    opacity: 0.45;
+    transition: opacity 0.22s;
+    filter: brightness(0) invert(1);
+  }
+  .service-toggle label:hover { border-color: rgba(20,84,116,0.65); }
+  .service-toggle input[type="radio"]:checked + label {
+    border-color: var(--primary); color: #fff;
+    background: var(--primary-light); box-shadow: 0 0 0 3px rgba(20,84,116,0.2);
+  }
+  .service-toggle input[type="radio"]:checked + label .svc-icon { opacity: 1; }
+
+  /* Conditional */
+  .conditional { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 0.35s ease, opacity 0.3s ease; overflow: hidden; }
+  .conditional > * { min-height: 0; }
+  .conditional.visible { grid-template-rows: 1fr; opacity: 1; }
+  .cond-inner { padding-top: 14px; }
+
+  /* Inputs */
+  .field-label {
+    display: block; font-family: 'Titillium Web', system-ui, sans-serif;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 10px;
+  }
+  .opt { font-weight: 400; text-transform: none; font-size: 11px; }
+
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%; background: var(--input-bg); border: 1.5px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-family: 'Titillium Web', system-ui, sans-serif;
+    font-size: 15px; padding: 14px 16px; outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
   }
-  input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(20,84,116,0.22);
-  }
-  input::placeholder { color: #2e4f63; }
+  input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(20,84,116,0.22); }
+  input::placeholder { color: #2a4a5e; }
 
-  /* Phone row */
+  .field { margin-bottom: 20px; }
   .phone-row { display: flex; gap: 8px; }
-  .phone-row .select-wrap { flex: 0 0 115px; }
+  .phone-row .select-wrap { flex: 0 0 120px; }
   .phone-row input { flex: 1; }
-
   .select-wrap { position: relative; }
-  .select-wrap::after {
-    content: '';
-    position: absolute;
-    right: 14px; top: 50%;
-    transform: translateY(-50%);
-    border: 5px solid transparent;
-    border-top-color: var(--muted);
-    pointer-events: none;
-  }
+  .select-wrap::after { content: ''; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); border: 5px solid transparent; border-top-color: var(--muted); pointer-events: none; }
   select {
-    width: 100%;
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-size: 15px;
-    padding: 11px 14px;
-    appearance: none;
-    -webkit-appearance: none;
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; background: var(--input-bg); border: 1.5px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-family: 'Titillium Web', system-ui, sans-serif;
+    font-size: 15px; padding: 14px 14px; appearance: none; outline: none; transition: border-color 0.2s;
   }
   select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(20,84,116,0.22); }
   select option { background: #112638; }
 
-  /* Conditional */
-  .conditional {
-    display: grid;
-    grid-template-rows: 0fr;
-    opacity: 0;
-    transition: grid-template-rows 0.35s ease, opacity 0.35s ease;
-    overflow: hidden;
+  /* Nav */
+  .nav-row { display: flex; gap: 12px; margin-top: 36px; }
+  .btn-back {
+    flex: 0 0 auto; background: transparent; border: 1.5px solid var(--border);
+    border-radius: 10px; color: var(--muted);
+    font-family: 'Titillium Web', system-ui, sans-serif;
+    font-size: 15px; font-weight: 600; padding: 13px 20px; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
   }
-  .conditional > * { min-height: 0; }
-  .conditional.visible {
-    grid-template-rows: 1fr;
-    opacity: 1;
-    margin-bottom: 18px;
+  .btn-back:hover { border-color: var(--muted); color: var(--text); }
+  .btn-next {
+    flex: 1;
+    background: linear-gradient(135deg, var(--primary) 0%, #1a7090 50%, var(--green) 100%);
+    background-size: 200% 100%; background-position: 0% 0%;
+    color: #fff; border: none; border-radius: 10px;
+    font-family: 'Titillium Web', system-ui, sans-serif;
+    font-size: 16px; font-weight: 700; padding: 14px; cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: background-position 0.4s ease, transform 0.1s, opacity 0.2s;
   }
+  .btn-next:hover  { background-position: 100% 0%; }
+  .btn-next:active { transform: scale(0.98); }
+  .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .section-divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 24px 0;
-  }
-  .section-title {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 16px;
-  }
+  /* Steps */
+  .step { display: none; }
+  .step.active { display: block; animation: slideIn 0.36s cubic-bezier(0.4,0,0.2,1) both; }
+  .step.active.back { animation: slideInBack 0.36s cubic-bezier(0.4,0,0.2,1) both; }
+  @keyframes slideIn     { from { opacity: 0; transform: translateX(26px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideInBack { from { opacity: 0; transform: translateX(-26px); } to { opacity: 1; transform: translateX(0); } }
 
-  .btn {
-    width: 100%;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--green) 100%);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 14px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 0.03em;
-    transition: filter 0.2s, transform 0.1s;
-    margin-top: 8px;
-    position: relative;
-    overflow: hidden;
-  }
-  .btn::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.06) 100%);
-    pointer-events: none;
-  }
-  .btn:hover  { filter: brightness(1.12); }
-  .btn:active { transform: scale(0.98); }
-  .btn:disabled { opacity: .6; cursor: not-allowed; }
-
-  .footer-note {
-    text-align: center;
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 20px;
-    line-height: 1.7;
-    animation: fadeInPage 0.5s ease 0.25s both;
-  }
+  .footer-note { text-align: center; font-size: 12px; color: var(--muted); margin-top: 24px; line-height: 1.8; }
   .footer-note a { color: var(--green); text-decoration: none; }
 
-  @keyframes fadeInPage {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
   @media (max-width: 480px) {
-    .card { padding: 28px 18px; }
+    .card { padding: 32px 20px 30px; }
+    body  { padding: 32px 12px 52px; }
   }
 </style>
 </head>
 <body>
 
 <div class="container">
+
   <div class="logo-wrap">
     <img src="https://static.wixstatic.com/media/78c590_4e2791f163fe4e0295b6f8f44179c16d~mv2.png/v1/crop/x_5,y_0,w_1601,h_659/fill/w_311,h_128,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/i42.png" alt="REIS Logística">
   </div>
 
   <div class="card">
-    <div class="card-header">
-      <div class="divider"></div>
-      <h1>Solicita una cotización</h1>
-      <p>Llena el formulario y un especialista te contactará a la brevedad.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span class="progress-label" id="stepLabel">Paso 1 de 5</span>
+        <span class="progress-count"><span id="pctNum">20</span>% completado</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:20%"></div>
+      </div>
+      <div class="progress-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
     </div>
 
-    <div id="formSection">
-
-      <!-- UBICACIÓN -->
-      <div class="field">
-        <span class="field-label">¿Dónde está tu operación? <span class="req">*</span></span>
-        <div class="radio-list">
-          <input type="radio" name="ubicacion" id="ub-juarez" value="Cd. Juárez">
-          <label for="ub-juarez">Cd. Juárez <span class="radio-circle"></span></label>
-
-          <input type="radio" name="ubicacion" id="ub-monterrey" value="Monterrey">
-          <label for="ub-monterrey">Monterrey <span class="radio-circle"></span></label>
-
-          <input type="radio" name="ubicacion" id="ub-slp" value="San Luis Potosí">
-          <label for="ub-slp">San Luis Potosí <span class="radio-circle"></span></label>
-
-          <input type="radio" name="ubicacion" id="ub-otro" value="Otro">
-          <label for="ub-otro">Otro <span class="radio-circle"></span></label>
-        </div>
+    <!-- PASO 1: Ubicación -->
+    <div class="step active" id="step-1">
+      <div class="step-header">
+        <div class="step-eyebrow">Operación</div>
+        <h2>¿Dónde está tu operación?</h2>
       </div>
+      <div class="radio-list">
+        <input type="radio" name="ubicacion" id="ub-juarez"    value="Cd. Juárez">
+        <label for="ub-juarez">Cd. Juárez <span class="radio-circle"></span></label>
 
-      <div class="conditional" id="field-ubicacion-otro">
-        <div style="padding-bottom: 2px;">
-          <span class="field-label">¿Cuál ciudad? <span class="req">*</span></span>
+        <input type="radio" name="ubicacion" id="ub-monterrey" value="Monterrey">
+        <label for="ub-monterrey">Monterrey <span class="radio-circle"></span></label>
+
+        <input type="radio" name="ubicacion" id="ub-slp"       value="San Luis Potosí">
+        <label for="ub-slp">San Luis Potosí <span class="radio-circle"></span></label>
+
+        <input type="radio" name="ubicacion" id="ub-otro"      value="Otro">
+        <label for="ub-otro">Otra ciudad <span class="radio-circle"></span></label>
+      </div>
+      <div class="conditional" id="cond-ubicacion">
+        <div class="cond-inner">
+          <span class="field-label">¿Cuál ciudad?</span>
           <input type="text" id="ubicacion-otro" placeholder="Ej. Guadalajara">
         </div>
       </div>
-
-      <!-- SERVICIO -->
-      <div class="field">
-        <span class="field-label">¿Qué servicio te interesa? <span class="req">*</span></span>
-        <div class="radio-list">
-          <input type="radio" name="servicio" id="svc-almacenaje" value="Almacenaje">
-          <label for="svc-almacenaje">Almacenaje <span class="radio-circle"></span></label>
-
-          <input type="radio" name="servicio" id="svc-comercio" value="Comercio Exterior">
-          <label for="svc-comercio">Comercio Exterior <span class="radio-circle"></span></label>
-        </div>
+      <div class="nav-row">
+        <button class="btn-next" onclick="next(1)">Siguiente →</button>
       </div>
+    </div>
 
-      <!-- EMPLEADOS -->
-      <div class="field">
-        <span class="field-label">¿Cuántos empleados tiene tu empresa? <span class="req">*</span></span>
-        <div class="radio-list">
-          <input type="radio" name="empleados" id="emp-1" value="1-49 empleados">
-          <label for="emp-1">1-49 empleados <span class="radio-circle"></span></label>
-
-          <input type="radio" name="empleados" id="emp-2" value="50-99 empleados">
-          <label for="emp-2">50-99 empleados <span class="radio-circle"></span></label>
-
-          <input type="radio" name="empleados" id="emp-3" value="100-249 empleados">
-          <label for="emp-3">100-249 empleados <span class="radio-circle"></span></label>
-
-          <input type="radio" name="empleados" id="emp-4" value="250+ empleados">
-          <label for="emp-4">250+ empleados <span class="radio-circle"></span></label>
-        </div>
+    <!-- PASO 2: Servicio -->
+    <div class="step" id="step-2">
+      <div class="step-header">
+        <div class="step-eyebrow">Servicio</div>
+        <h2>¿Qué servicio te interesa?</h2>
       </div>
+      <div class="service-toggle">
 
-      <!-- EMPRESA -->
-      <div class="field">
-        <span class="field-label">Nombre de tu empresa <span class="req">*</span></span>
-        <input type="text" id="empresa" placeholder="Ej. Industrias XYZ">
+        <input type="radio" name="servicio" id="svc-almacenaje" value="Almacenaje">
+        <label for="svc-almacenaje">
+          <img class="svc-icon" src="assets/png/icon-almacenaje.png" alt="Almacenaje">
+          Almacenaje
+        </label>
+
+        <input type="radio" name="servicio" id="svc-comercio" value="Comercio Exterior">
+        <label for="svc-comercio">
+          <img class="svc-icon" src="assets/png/icon-comercio-exterior.png" alt="Comercio Exterior">
+          Comercio Exterior
+        </label>
+
       </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="back(2)">← Atrás</button>
+        <button class="btn-next" onclick="next(2)">Siguiente →</button>
+      </div>
+    </div>
 
-      <hr class="section-divider">
-      <p class="section-title">Información de contacto</p>
+    <!-- PASO 3: Empleados -->
+    <div class="step" id="step-3">
+      <div class="step-header">
+        <div class="step-eyebrow">Tu empresa</div>
+        <h2>¿Cuántos empleados tienen?</h2>
+      </div>
+      <div class="radio-list">
+        <input type="radio" name="empleados" id="emp-1" value="1-49 empleados">
+        <label for="emp-1">1–49 empleados <span class="radio-circle"></span></label>
 
-      <!-- NOMBRE -->
+        <input type="radio" name="empleados" id="emp-2" value="50-99 empleados">
+        <label for="emp-2">50–99 empleados <span class="radio-circle"></span></label>
+
+        <input type="radio" name="empleados" id="emp-3" value="100-249 empleados">
+        <label for="emp-3">100–249 empleados <span class="radio-circle"></span></label>
+
+        <input type="radio" name="empleados" id="emp-4" value="250+ empleados">
+        <label for="emp-4">250+ empleados <span class="radio-circle"></span></label>
+      </div>
+      <div class="nav-row">
+        <button class="btn-back" onclick="back(3)">← Atrás</button>
+        <button class="btn-next" onclick="next(3)">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- PASO 4: Empresa -->
+    <div class="step" id="step-4">
+      <div class="step-header">
+        <div class="step-eyebrow">Tu empresa</div>
+        <h2>¿Cómo se llama tu empresa?</h2>
+      </div>
+      <input type="text" id="empresa" placeholder="Ej. Industrias XYZ" style="font-size:16px;padding:16px 18px;">
+      <div class="nav-row">
+        <button class="btn-back" onclick="back(4)">← Atrás</button>
+        <button class="btn-next" onclick="next(4)">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- PASO 5: Contacto -->
+    <div class="step" id="step-5">
+      <div class="step-header">
+        <div class="step-eyebrow">Contacto</div>
+        <h2>¿Cómo te contactamos?</h2>
+      </div>
       <div class="field">
-        <span class="field-label">Nombre completo <span class="req">*</span></span>
+        <span class="field-label">Nombre completo</span>
         <input type="text" id="nombre" placeholder="Ej. Juan García" autocomplete="name">
       </div>
-
-      <!-- EMAIL -->
       <div class="field">
-        <span class="field-label">Correo electrónico <span class="req">*</span></span>
+        <span class="field-label">Correo electrónico</span>
         <input type="email" id="email" placeholder="tu@empresa.com" autocomplete="email">
       </div>
-
-      <!-- WHATSAPP (opcional) -->
       <div class="field">
-        <span class="field-label">WhatsApp <span style="color:var(--muted);font-weight:400;text-transform:none;">(opcional)</span></span>
+        <span class="field-label">WhatsApp <span class="opt">(opcional)</span></span>
         <div class="phone-row">
           <div class="select-wrap">
             <select id="clave-pais">
@@ -357,9 +396,12 @@
           <input type="tel" id="whatsapp" placeholder="Número de WhatsApp" autocomplete="tel">
         </div>
       </div>
-
-      <button class="btn" id="submitBtn" onclick="submitForm()">Enviar solicitud →</button>
+      <div class="nav-row">
+        <button class="btn-back" onclick="back(5)">← Atrás</button>
+        <button class="btn-next" id="submitBtn" onclick="submitForm()">Enviar solicitud →</button>
+      </div>
     </div>
+
   </div>
 
   <div class="footer-note">
@@ -370,74 +412,122 @@
 </div>
 
 <script>
-  function show(id) { document.getElementById(id).classList.add('visible'); }
-  function hide(id) { document.getElementById(id).classList.remove('visible'); }
+  const TOTAL = 5;
+  let direction = 'forward';
+  let advancing = false;
+
+  function setupAutoAdvance(name, stepNum) {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.addEventListener('change', () => {
+        if (advancing) return;
+        advancing = true;
+        setTimeout(() => { advancing = false; next(stepNum); }, 340);
+      });
+    });
+  }
+  setupAutoAdvance('ubicacion', 1);
+  setupAutoAdvance('servicio',  2);
+  setupAutoAdvance('empleados', 3);
 
   document.querySelectorAll('input[name="ubicacion"]').forEach(r => {
     r.addEventListener('change', () => {
-      if (r.value === 'Otro' && r.checked) {
-        show('field-ubicacion-otro');
-      } else {
-        hide('field-ubicacion-otro');
-        document.getElementById('ubicacion-otro').value = '';
-      }
+      const cond = document.getElementById('cond-ubicacion');
+      if (r.value === 'Otro' && r.checked) cond.classList.add('visible');
+      else { cond.classList.remove('visible'); document.getElementById('ubicacion-otro').value = ''; }
     });
   });
 
-  function submitForm() {
-    const nombre    = document.getElementById('nombre').value.trim();
-    const email     = document.getElementById('email').value.trim();
-    const clave     = document.getElementById('clave-pais').value;
-    const whatsapp  = document.getElementById('whatsapp').value.trim();
-    const servicio  = document.querySelector('input[name="servicio"]:checked');
-    const ubicRadio = document.querySelector('input[name="ubicacion"]:checked');
-    const empleados = document.querySelector('input[name="empleados"]:checked');
-    const empresa   = document.getElementById('empresa').value.trim();
-    const ubicOtro  = document.getElementById('ubicacion-otro').value.trim();
+  function updateProgress(step) {
+    const pct = Math.round((step / TOTAL) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('stepLabel').textContent = `Paso ${step} de ${TOTAL}`;
+    document.getElementById('pctNum').textContent = pct;
+    document.querySelectorAll('.dot').forEach((d, i) => {
+      d.className = 'dot';
+      if (i < step - 1) d.classList.add('done');
+      else if (i === step - 1) d.classList.add('active');
+    });
+  }
 
-    if (!ubicRadio)  return alert('Por favor selecciona la ubicación de tu operación.');
-    if (ubicRadio.value === 'Otro' && !ubicOtro) return alert('Por favor especifica tu ciudad.');
-    if (!servicio)   return alert('Por favor selecciona el servicio que te interesa.');
-    if (!empleados)  return alert('Por favor selecciona el tamaño de tu empresa.');
-    if (!empresa)    return alert('Por favor ingresa el nombre de tu empresa.');
-    if (!nombre)     return alert('Por favor ingresa tu nombre completo.');
-    if (!email || !/\S+@\S+\.\S+/.test(email)) return alert('Por favor ingresa un correo válido.');
+  function showStep(from, to) {
+    document.getElementById('step-' + from).classList.remove('active', 'back');
+    const toEl = document.getElementById('step-' + to);
+    toEl.classList.add('active');
+    if (direction === 'back') toEl.classList.add('back'); else toEl.classList.remove('back');
+    updateProgress(to);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function next(step) {
+    if (step === 1) {
+      const ub = document.querySelector('input[name="ubicacion"]:checked');
+      if (!ub) return shake('step-1');
+      if (ub.value === 'Otro' && !document.getElementById('ubicacion-otro').value.trim()) {
+        document.getElementById('ubicacion-otro').focus(); return;
+      }
+    }
+    if (step === 2 && !document.querySelector('input[name="servicio"]:checked'))  return shake('step-2');
+    if (step === 3 && !document.querySelector('input[name="empleados"]:checked')) return shake('step-3');
+    if (step === 4 && !document.getElementById('empresa').value.trim()) { document.getElementById('empresa').focus(); return; }
+
+    direction = 'forward';
+    showStep(step, step + 1);
+    if (step + 1 === 5) fbq('track', 'Lead');
+  }
+
+  function back(step) { direction = 'back'; showStep(step, step - 1); }
+
+  function shake(id) {
+    document.getElementById(id).animate([
+      { transform: 'translateX(0)' }, { transform: 'translateX(-8px)' },
+      { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' },
+      { transform: 'translateX(0)' },
+    ], { duration: 320, easing: 'ease-out' });
+  }
+
+  function submitForm() {
+    const nombre   = document.getElementById('nombre').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const clave    = document.getElementById('clave-pais').value;
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+
+    if (!nombre) { document.getElementById('nombre').focus(); return; }
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { document.getElementById('email').focus(); return; }
 
     const btn = document.getElementById('submitBtn');
-    btn.textContent = 'Enviando...';
+    btn.textContent = 'Enviando…';
     btn.disabled = true;
 
+    const servicio       = document.querySelector('input[name="servicio"]:checked');
+    const ubicRadio      = document.querySelector('input[name="ubicacion"]:checked');
+    const empleados      = document.querySelector('input[name="empleados"]:checked');
+    const empresa        = document.getElementById('empresa').value.trim();
+    const ubicOtro       = document.getElementById('ubicacion-otro').value.trim();
     const ubicacionFinal = ubicRadio.value === 'Otro' ? ubicOtro : ubicRadio.value;
     const phoneCompleto  = whatsapp ? (clave + whatsapp) : '';
     const parts          = nombre.split(' ');
-    const firstName      = parts[0] || '';
-    const lastName       = parts.slice(1).join(' ') || '';
 
     const ghlPayload = {
       locationId: 'qsHWHzalt6jKbEflPpjS',
-      firstName,
-      lastName,
-      email,
-      phone: phoneCompleto,
+      firstName: parts[0] || '', lastName: parts.slice(1).join(' ') || '',
+      email, phone: phoneCompleto,
       source: 'REIS Meta Form',
       tags: [servicio.value, ubicacionFinal, 'meta', 'landing page'].filter(Boolean),
       customFields: [
-        { key: 'tipo_de_servicio', value: servicio.value    },
-        { key: 'ubicacin',         value: ubicacionFinal    }, // typo intencional — key en GHL
-        { key: 'empresa',          value: empresa            },
-        { key: 'empleados',        value: empleados.value    },
+        { key: 'tipo_de_servicio', value: servicio.value   },
+        { key: 'ubicacin',         value: ubicacionFinal   },
+        { key: 'empresa',          value: empresa           },
+        { key: 'empleados',        value: empleados.value  },
       ],
     };
 
     const redirectParams = new URLSearchParams({
-      nombre,
-      email,
-      whatsapp:  phoneCompleto,
-      servicio:  servicio.value,
-      ubicacion: ubicacionFinal,
-      empresa,
-      empleados: empleados.value,
+      nombre, email, whatsapp: phoneCompleto,
+      servicio: servicio.value, ubicacion: ubicacionFinal,
+      empresa, empleados: empleados.value,
     });
+
+    fbq('track', 'CompleteRegistration');
 
     fetch('https://services.leadconnectorhq.com/contacts/', {
       method: 'POST',
@@ -448,7 +538,7 @@
       },
       body: JSON.stringify(ghlPayload),
     }).finally(() => {
-      window.location.href = 'https://www.reislogistica.com/meta-thank-you?' + redirectParams.toString();
+      window.location.href = 'https://cotiza.reislogistica.com/gracias?' + redirectParams.toString();
     });
   }
 </script>
